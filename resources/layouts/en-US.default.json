@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "name": "Default (English US)",
+    "author": "Janlu",
+    "cformat": 1,
+    "split": false
+  },
+  "layout": {
+    "rows": [
+      {
+        "keys": [
+          {
+            "label": "q",
+            "action": "text:q"
+          },
+          {
+            "label": "w",
+            "action": "text:w"
+          },
+          {
+            "label": "e",
+            "action": "text:e"
+          }
+        ]
+      },
+      {
+        "keys": [
+          {
+            "label": "Shift",
+            "action": "mod:uppercase"
+          }
+        ]
+      },
+      {
+        "keys": [
+          {
+            "label": "123",
+            "action": "view:symbols"
+          }
+        ]
+      }
+    ]
+  }
+}
