@@ -12,7 +12,7 @@ namespace j_osk {
       bool shift_ = false, control_ = false, alt_ = false, super_ = false;
 
     public:
-      bool is_active(Modifier mod);
+      bool is_active(Modifier mod) const;
       void set_active(Modifier mod, bool active);
       void toggle(Modifier mod);
   };
