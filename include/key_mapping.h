@@ -14,4 +14,5 @@ struct KeyAction {
 };
 
 std::optional<KeyAction> map_char_to_key(char c);
+std::optional<int> map_special_key(const std::string &name);
 void emit_key_press_with_modifiers(int fd, int key_code, bool shift, const j_osk::ModifierState &state);

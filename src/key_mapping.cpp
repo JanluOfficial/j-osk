@@ -97,6 +97,17 @@ std::optional<KeyAction> map_char_to_key(char c) {
   }
 }
 
+std::optional<int> map_special_key(const std::string &name) {
+  if (name == "backspace") return KEY_BACKSPACE;
+  if (name == "enter")     return KEY_ENTER;
+  if (name == "tab")       return KEY_TAB;
+  if (name == "left")      return KEY_LEFT;
+  if (name == "right")     return KEY_RIGHT;
+  if (name == "up")        return KEY_UP;
+  if (name == "down")      return KEY_DOWN;
+  return std::nullopt;
+}
+
 void emit_key_press_with_modifiers(int fd, int key_code, bool shift, const j_osk::ModifierState &state) {
   bool temp_shift = shift && !state.is_active(j_osk::Modifier::Shift);
 
