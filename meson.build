@@ -13,6 +13,7 @@ peel_gen = find_program('peel-gen')
 # gnome for GResource complication
 gnome = import('gnome')
 
+run_command('mkdir', 'build/peel')
 peel_files = custom_target('peel-gen',
   output: 'peel',
   command: [
