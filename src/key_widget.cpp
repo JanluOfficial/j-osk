@@ -31,6 +31,9 @@ Gtk::Button *create_key_button(const LayoutKey &key) {
   if (key.width && *key.width >= MIN_SIZED_WIDTH) {
     button->set_size_request(static_cast<int>(*key.width * KEY_UNIT_SIZE),
                               static_cast<int>(KEY_UNIT_SIZE));
+    button->set_hexpand(false);
+  } else {
+    button->set_hexpand(true);
   }
 
   return std::move(button).release_floating_ptr();
