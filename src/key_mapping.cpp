@@ -5,7 +5,7 @@
 
 #include <linux/input-event-codes.h>
 
-std::optional<KeyAction> map_text_character_to_key(char c) {
+std::optional<KeyAction> map_char_to_key(char c) {
   switch (c) {
     case 'a': return KeyAction{KEY_A, false};
     case 'b': return KeyAction{KEY_B, false};
