@@ -18,4 +18,5 @@ namespace j_osk {
   };
 
   std::optional<Modifier> parse_modifier(std::string name);
+  std::optional<int> get_modifier_keycode(Modifier mod);
 }

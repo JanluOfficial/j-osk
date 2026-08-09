@@ -56,4 +56,16 @@ std::optional<Modifier> parse_modifier(std::string name) {
   return;
 }
 
+std::optional<int> get_modifier_keycode(Modifier mod) {
+  switch (mod) {
+    case Modifier::Shift: return KEY_LEFTSHIFT;
+    case Modifier::Control: return KEY_LEFTCTRL;
+    case Modifier::Alt: return KEY_LEFTALT;
+    case Modifier::Super: return KEY_LEFTMETA;
+    default:
+      std::cout << "[WARNING] Could not get Keycode for modifier.";
+      return;
+  }
+}
+
 }
