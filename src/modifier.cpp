@@ -57,7 +57,7 @@ std::optional<Modifier> parse_modifier(std::string name) {
   if (name == "super" || name == "meta")
     return Modifier::Super;
   std::cout << "[WARNING] Cannot parse modifier with name \"" << name << "\".";
-  return;
+  return std::nullopt;
 }
 
 std::optional<int> get_modifier_keycode(Modifier mod) {
@@ -68,7 +68,7 @@ std::optional<int> get_modifier_keycode(Modifier mod) {
     case Modifier::Super: return KEY_LEFTMETA;
     default:
       std::cout << "[WARNING] Could not get Keycode for modifier.";
-      return;
+      return std::nullopt;
   }
 }
 
