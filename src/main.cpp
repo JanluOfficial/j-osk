@@ -67,8 +67,10 @@ static j_osk::Layout load_layout_from_resource() {
 void handle_layout_action(int uinput_fd, const std::string &action,
   const std::shared_ptr<j_osk::ModifierState> &modifier_state) {
   constexpr const char prefix_text[] = "text:";
+  constexpr const char prefix_key[]  = "key:";
 
   if (action.rfind(prefix_text, 0) == 0) {
+    // Text
     std::string text = action.substr(sizeof(prefix_text) - 1);
     for (char c : text) {
       auto mapped = map_char_to_key(c);
@@ -77,6 +79,12 @@ void handle_layout_action(int uinput_fd, const std::string &action,
 
       emit_key_press_with_modifiers(uinput_fd, mapped->key_code, mapped->shift, *modifier_state);
     }
+    return;
+  }
+
+  if (action.rfind(prefix_key, 0) == 0) {
+    if (auto code = map_special_key(action.substr(sizeof(prefix_key) - 1)))
+      emit_key_press_with_modifiers(uinput_fd, *code, false, *modifier_state);
     return;
   }
 
