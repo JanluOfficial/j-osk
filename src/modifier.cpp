@@ -9,7 +9,7 @@
 
 namespace j_osk {
 
-bool ModifierState::is_active(Modifier mod) {
+bool ModifierState::is_active(Modifier mod) const {
   switch (mod) {
     case Modifier::Shift: return shift_;
     case Modifier::Control: return control_;
