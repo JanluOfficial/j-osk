@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/build/peel",
+                "${workspaceFolder}/build/",
                 "/usr/include/**"
             ],
             "defines": [],
