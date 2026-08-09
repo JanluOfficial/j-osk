@@ -136,7 +136,7 @@ static void build_window(Gtk::Application *app, int uinput_fd,
 
   for (const auto &row : layout.rows) {
     auto row_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6);
-    row_box->set_homogeneous(true);
+    //row_box->set_homogeneous(true);
 
     for (const auto &key : row.keys) {
       if (key.label.empty())
@@ -176,18 +176,25 @@ int main(int argc, char *argv[]) {
 
     for (const auto &row : layout.rows) {
       for (const auto &key : row.keys) {
-        if (key.action.rfind("text:", 0) != 0)
+        if (key.action.rfind("text:", 0) == 0) {
+          std::string text = key.action.substr(sizeof("text:") - 1);
+          for (char c : text) {
+            auto mapped = map_char_to_key(c);
+            if (!mapped)
+              continue;
+            codes.insert(mapped->key_code);
+            if (mapped->shift)
+              codes.insert(KEY_LEFTSHIFT);
+          }
           continue;
-
-        std::string text = key.action.substr(sizeof("text:") - 1);
-        for (char c : text) {
-          auto mapped = map_char_to_key(c);
-          if (!mapped)
-            continue;
-          codes.insert(mapped->key_code);
-          if (mapped->shift)
-            codes.insert(KEY_LEFTSHIFT);
         }
+ 
+        if (key.action.rfind("key:", 0) == 0) {
+          if (auto code = map_special_key(key.action.substr(sizeof("key:") - 1)))
+            codes.insert(*code);
+          continue;
+        }
+
       }
     }
 
