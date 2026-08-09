@@ -72,6 +72,11 @@ LayoutKey LayoutParser::parseKey(const nlohmann::json &keyJson) {
   key.label = keyJson.at("label").get<std::string>();
   key.action = keyJson.at("action").get<std::string>();
 
+  if (key.action.rfind("mod:", 0) == 0) // Modifier
+    key.type = KeyType::Modifier;
+  else if (key.action.rfind("text:", 0) == 0) // Text
+    key.type = KeyType::Text;
+
   if (keyJson.contains("width")) {
     key.width = keyJson.at("width").get<float>();
   }
