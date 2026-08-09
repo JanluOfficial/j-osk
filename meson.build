@@ -27,8 +27,14 @@ peel_files = custom_target('peel-gen',
 
 # Find all C++ files in src/
 #src_files = run_command('find', 'src', '-name', '*.cpp', check: true).stdout().strip().split('\n')
-src_files = run_command('find', 'src', '-name', '*.cpp', 
-  check: true).stdout().strip().split('\n')
+src_files = [
+  'src/main.cpp',
+  'src/sysinput.cpp',
+  'src/layout_parser.cpp',
+  'src/key_mapping.cpp',
+  'src/modifier.cpp',
+  'src/key_widget.cpp'
+]
 
 # Compile the resources
 resources = gnome.compile_resources(
