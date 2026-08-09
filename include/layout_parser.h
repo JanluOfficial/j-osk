@@ -9,12 +9,9 @@
 
 namespace j_osk {
 
-enum class KeyType { Text, Modifier };
-
 struct LayoutKey {
   std::string label;
   std::string action;
-  KeyType type;
   std::optional<float> width;
 };
 
