@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <optional>
+#include <string>
+#include <bits/stdc++.h>
 
 #include <linux/input-event-codes.h>
 
@@ -44,6 +46,8 @@ void ModifierState::toggle(Modifier mod) {
 }
 
 std::optional<Modifier> parse_modifier(std::string name) {
+  std::transform(name.begin(), name.end(), name.begin() ,::tolower);
+
   if (name == "shift")
     return Modifier::Shift;
   if (name == "control")
