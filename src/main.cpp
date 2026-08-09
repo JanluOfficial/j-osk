@@ -4,6 +4,9 @@
 #include <peel/Gtk/Button.h>
 #include <peel/Gtk/ToggleButton.h>
 #include <peel/Gtk/Orientation.h>
+#include <peel/Gtk/CssProvider.h>
+#include <peel/Gtk/StyleContext.h>
+#include <peel/Gdk/Display.h>
 #include <peel/Gtk4LayerShell/Gtk4LayerShell.h>
 #include <peel/Gio/ApplicationFlags.h>
 
@@ -12,18 +15,89 @@
 #include <linux/uinput.h>
 #include <cstring>
 #include <iostream>
+#include <memory>
+#include <optional>
+#include <set>
+#include <stdexcept>
 
+#include <gio/gio.h>
 #include <nlohmann/json.hpp>
 
-#include "key.h"
+#include "josk-resources.h"
+#include "key_mapping.h"
+#include "layout_parser.h"
 #include "sysinput.h"
+#include "key_widget.h"
 
 using namespace peel;
 using namespace nlohmann::json_abi_v3_12_0;
 
-// Window building function (duh)
-static void build_window(Gtk::Application *app, int uinput_fd) {
+static j_osk::Layout load_layout_from_resource() {
+  GResource *resource = josk_get_resource();
+  if (!resource) {
+    throw std::runtime_error("Unable to load embedded GResource");
+  }
+
+  g_resources_register(resource);
+
+  GError *error = nullptr;
+  GBytes *bytes = g_resource_lookup_data(resource,
+      "/org/josk/assets/layouts/en-US.default.json",
+      G_RESOURCE_LOOKUP_FLAGS_NONE,
+      &error);
+
+  if (!bytes) {
+    std::string message = "Unable to load layout from resource.";
+    if (error) {
+      message += " ";
+      message += error->message;
+      g_error_free(error);
+    }
+    throw std::runtime_error(message);
+  }
+
+  gsize size;
+  const char *data = reinterpret_cast<const char *>(g_bytes_get_data(bytes, &size));
+  std::string json_text(data, size);
+  g_bytes_unref(bytes);
+
+  return j_osk::LayoutParser::parseJson(nlohmann::json::parse(json_text));
+}
+
+void handle_layout_action(int uinput_fd, const std::string &action,
+  const std::shared_ptr<j_osk::ModifierState> &modifier_state) {
+  constexpr const char prefix_text[] = "text:";
+
+  if (action.rfind(prefix_text, 0) == 0) {
+    std::string text = action.substr(sizeof(prefix_text) - 1);
+    for (char c : text) {
+      auto mapped = map_char_to_key(c);
+      if (!mapped)
+        continue;
+
+      emit_key_press_with_modifiers(uinput_fd, mapped->key_code, mapped->shift, *modifier_state);
+    }
+    return;
+  }
+
+  std::cout << "Unhandled layout action: " << action << std::endl;
+}
+
+static void build_window(Gtk::Application *app, int uinput_fd,
+  const j_osk::Layout &layout,
+  const std::shared_ptr<j_osk::ModifierState> &modifier_state) {
   namespace LS = Gtk4LayerShell;
+
+  auto css_provider = Gtk::CssProvider::create();
+  css_provider->load_from_resource("/org/josk/assets/style.css");
+  auto style_provider = std::move(css_provider).cast<Gtk::StyleProvider>();
+  auto display = Gdk::Display::get_default();
+  if (display) {
+    Gtk::StyleContext::add_provider_for_display(
+      display,
+      style_provider,
+      GTK_STYLE_PROVIDER_PRIORITY_USER);
+  }
 
   auto *window = Gtk::Window::create();
   window->set_application(app);
@@ -41,50 +115,83 @@ static void build_window(Gtk::Application *app, int uinput_fd) {
 
   auto main_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 6); // 6px gap between rows
 
-  for (auto& row : left_keys) {
+  auto modifier_buttons = std::make_shared<std::vector<j_osk::KeyButtonEntry>>();
+
+  auto sync_modifier_buttons = [modifier_buttons, modifier_state] {
+    for (const auto &entry : *modifier_buttons) {
+      auto style = entry.button->get_style_context();
+      style->remove_class("active");
+      style->remove_class("inactive");
+      style->add_class(modifier_state->is_active(*entry.modifier) ? "active" : "inactive");
+    }
+  };
+
+  for (const auto &row : layout.rows) {
     auto row_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6);
     row_box->set_homogeneous(true);
 
-    for (Key key : row) {
-      if (!key.label) continue;
+    for (const auto &key : row.keys) {
+      if (key.label.empty())
+        continue;
 
-      auto button = Gtk::Button::create_with_label(key.label);
-      
+      auto *button = j_osk::create_key_button(key);
 
-      if (key.width >= 0.5) {
-         button->set_size_request(key.width * 40, 40);
+      if (key.action.rfind("mod:", 0) == 0) {
+        if (auto mod = j_osk::parse_modifier(key.action.substr(sizeof("mod:") - 1)))
+          modifier_buttons->push_back({button, *mod});
       }
 
-      int code = key.code;
-      button->connect_clicked([uinput_fd, code](Gtk::Button* /*btn*/) {
-
-        emit_key_press(uinput_fd, code);
-      });
-
-      row_box->append(std::move(button));
+      j_osk::wire_key_action(button, key, uinput_fd, modifier_state, sync_modifier_buttons);
+      row_box->append(button);
     }
 
-    // Add the completed horizontal row container into our vertical layout stack
     main_box->append(std::move(row_box));
   }
 
+  sync_modifier_buttons();
   window->set_child(std::move(main_box));
   window->present();
 }
 
 int main(int argc, char *argv[]) {
-  // Set up uinput virtual device (makes it worky :D )
-  int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+  int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK); // uinput virtual device setup
 
   ioctl(fd, UI_SET_EVBIT, EV_KEY);
 
-  for (auto &row : left_keys)
-    for (auto &key : row)
-      ioctl(fd, UI_SET_KEYBIT, key.code);
+  auto collect_keycodes = [&](const j_osk::Layout &layout) {
+    std::set<int> codes;
+    for (auto mod : {j_osk::Modifier::Shift, j_osk::Modifier::Control,
+                      j_osk::Modifier::Alt, j_osk::Modifier::Super}) {
+      if (auto code = j_osk::get_modifier_keycode(mod))
+        codes.insert(*code);
+    }
 
-  for (auto &row : right_keys)
-    for (auto &key : row)
-      ioctl(fd, UI_SET_KEYBIT, key.code);
+    for (const auto &row : layout.rows) {
+      for (const auto &key : row.keys) {
+        if (key.action.rfind("text:", 0) != 0)
+          continue;
+
+        std::string text = key.action.substr(sizeof("text:") - 1);
+        for (char c : text) {
+          auto mapped = map_char_to_key(c);
+          if (!mapped)
+            continue;
+          codes.insert(mapped->key_code);
+          if (mapped->shift)
+            codes.insert(KEY_LEFTSHIFT);
+        }
+      }
+    }
+
+    return codes;
+  };
+
+  auto layout = load_layout_from_resource();
+  auto keycodes = collect_keycodes(layout);
+  for (int code : keycodes)
+    ioctl(fd, UI_SET_KEYBIT, code);
+
+  auto modifier_state = std::make_shared<j_osk::ModifierState>();
 
   //std::cout << "KEY_Q is " << KEY_Q << std::endl; // This was for debug
 
@@ -103,9 +210,9 @@ int main(int argc, char *argv[]) {
     Gio::Application::Flags::DEFAULT_FLAGS
   );
 
-  app->connect_activate ([fd] (Gio::Application *gio_app) {
+  app->connect_activate ([fd, layout = std::move(layout), modifier_state] (Gio::Application *gio_app) {
     auto *gtk_app = reinterpret_cast<Gtk::Application *>(gio_app);
-    build_window(gtk_app, fd);
+    build_window(gtk_app, fd, layout, modifier_state);
   });
 
   return app->run(argc, argv);
