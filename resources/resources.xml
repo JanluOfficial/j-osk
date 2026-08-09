@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/josk/assets">
     <file>style.css</file>
+    <file>layouts/en-US.default.json</file>
   </gresource>
 </gresources>

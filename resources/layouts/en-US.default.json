@@ -1,34 +1,57 @@
 {
+  "cformat": 1,
   "metadata": {
     "name": "Default (English US)",
     "author": "Janlu",
-    "cformat": 1,
     "split": false
   },
   "layout": {
     "rows": [
       {
         "keys": [
-          {
-            "label": "q",
-            "action": "text:q"
-          },
-          {
-            "label": "w",
-            "action": "text:w"
-          },
-          {
-            "label": "e",
-            "action": "text:e"
-          }
+          { "label": "q", "action": "text:q" },
+          { "label": "w", "action": "text:w" },
+          { "label": "e", "action": "text:e" },
+          { "label": "r", "action": "text:r" },
+          { "label": "t", "action": "text:t" },
+          { "label": "y", "action": "text:y" },
+          { "label": "u", "action": "text:u" },
+          { "label": "i", "action": "text:i" },
+          { "label": "o", "action": "text:o" },
+          { "label": "p", "action": "text:p" }
         ]
       },
       {
         "keys": [
-          {
-            "label": "Shift",
-            "action": "mod:uppercase"
-          }
+          { "label": "a", "action": "text:a" },
+          { "label": "s", "action": "text:s" },
+          { "label": "d", "action": "text:d" },
+          { "label": "f", "action": "text:f" },
+          { "label": "g", "action": "text:g" },
+          { "label": "h", "action": "text:h" },
+          { "label": "j", "action": "text:j" },
+          { "label": "k", "action": "text:k" },
+          { "label": "l", "action": "text:l" },
+          { "label": ";", "action": "text:;" }
+        ]
+      },
+      {
+        "keys": [
+          { "label": "z", "action": "text:z" },
+          { "label": "x", "action": "text:x" },
+          { "label": "c", "action": "text:c" },
+          { "label": "v", "action": "text:v" },
+          { "label": "b", "action": "text:b" },
+          { "label": "n", "action": "text:n" },
+          { "label": "m", "action": "text:m" },
+          { "label": ",", "action": "text:," },
+          { "label": ".", "action": "text:." },
+          { "label": "/", "action": "text:/" }
+        ]
+      },
+      {
+        "keys": [
+          { "label": " ", "action": "text: " }
         ]
       },
       {
