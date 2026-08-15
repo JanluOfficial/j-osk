@@ -2,64 +2,103 @@
   "cformat": 1,
   "metadata": {
     "name": "Default (English US)",
-    "author": "Janlu",
-    "split": false
+    "author": "Janlu"
   },
   "layout": {
-    "rows": [
+    "sections": [
       {
-        "keys": [
-          { "label": "tab", "action": "key:tab", "width": 48},
-          { "label": "q", "action": "text:q" },
-          { "label": "w", "action": "text:w" },
-          { "label": "e", "action": "text:e" },
-          { "label": "r", "action": "text:r" },
-          { "label": "t", "action": "text:t" },
-          { "label": "y", "action": "text:y" },
-          { "label": "u", "action": "text:u" },
-          { "label": "i", "action": "text:i" },
-          { "label": "o", "action": "text:o" },
-          { "label": "p", "action": "text:p" },
-          { "label": "back", "action": "key:backspace", "width": 48}
+        "rows": [
+          {
+            "keys": [
+              { "label": "tab", "action": "key:tab", "width": 96 },
+              { "label": "q", "action": "text:q" },
+              { "label": "w", "action": "text:w" },
+              { "label": "e", "action": "text:e" },
+              { "label": "r", "action": "text:r" },
+              { "label": "t", "action": "text:t" },
+              { "label": "y", "action": "text:y" },
+              { "label": "u", "action": "text:u" },
+              { "label": "i", "action": "text:i" },
+              { "label": "o", "action": "text:o" },
+              { "label": "p", "action": "text:p" },
+              { "label": "back", "action": "key:backspace", "width": 96 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "123", "action": "view:symbols", "width": 96 },
+              { "label": "a", "action": "text:a" },
+              { "label": "s", "action": "text:s" },
+              { "label": "d", "action": "text:d" },
+              { "label": "f", "action": "text:f" },
+              { "label": "g", "action": "text:g" },
+              { "label": "h", "action": "text:h" },
+              { "label": "j", "action": "text:j" },
+              { "label": "k", "action": "text:k" },
+              { "label": "l", "action": "text:l" },
+              { "label": ";", "action": "text:;" },
+              { "label": "enter", "action": "key:enter", "width": 96 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "shift", "action": "mod:shift", "width": 96 },
+              { "label": "z", "action": "text:z" },
+              { "label": "x", "action": "text:x" },
+              { "label": "c", "action": "text:c" },
+              { "label": "v", "action": "text:v" },
+              { "label": "b", "action": "text:b" },
+              { "label": "n", "action": "text:n" },
+              { "label": "m", "action": "text:m" },
+              { "label": ",", "action": "text:," },
+              { "label": ".", "action": "text:." },
+              { "label": "/", "action": "text:/" },
+              { "label": "shift", "action": "mod:shift", "width": 96 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "control", "action": "mod:control", "width": 96 },
+              { "label": "super", "action": "mod:super", "width": 96 },
+              { "label": "alt", "action": "mod:alt", "width": 96 },
+              { "label": " ", "action": "text: " },
+              { "label": "alt", "action": "mod:alt", "width": 96 },
+              { "label": "control", "action": "mod:control", "width": 96 }
+            ]
+          }
         ]
       },
       {
-        "keys": [
-          { "label": "123", "action": "view:symbols", "width": 48 },
-          { "label": "a", "action": "text:a" },
-          { "label": "s", "action": "text:s" },
-          { "label": "d", "action": "text:d" },
-          { "label": "f", "action": "text:f" },
-          { "label": "g", "action": "text:g" },
-          { "label": "h", "action": "text:h" },
-          { "label": "j", "action": "text:j" },
-          { "label": "k", "action": "text:k" },
-          { "label": "l", "action": "text:l" },
-          { "label": ";", "action": "text:;" },
-          { "label": "enter", "action": "key:enter", "width": 48}
-        ]
-      },
-      {
-        "keys": [
-          { "label": "shift", "action": "mod:shift", "width": 48},
-          { "label": "z", "action": "text:z" },
-          { "label": "x", "action": "text:x" },
-          { "label": "c", "action": "text:c" },
-          { "label": "v", "action": "text:v" },
-          { "label": "b", "action": "text:b" },
-          { "label": "n", "action": "text:n" },
-          { "label": "m", "action": "text:m" },
-          { "label": ",", "action": "text:," },
-          { "label": ".", "action": "text:." },
-          { "label": "/", "action": "text:/" },
-          { "label": "shift", "action": "mod:shift", "width": 48}
-        ]
-      },
-      {
-        "keys": [
-          { "label": "control", "action": "mod:control", "width": 48},
-          { "label": " ", "action": "text: " },
-          { "label": "control", "action": "mod:control", "width": 48}
+        "name": "symbols",
+        "width": 120,
+        "rows": [
+          {
+            "keys": [
+              { "label": "1", "action": "text:1", "width": 64 },
+              { "label": "2", "action": "text:2", "width": 64 },
+              { "label": "3", "action": "text:3", "width": 64 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "4", "action": "text:4", "width": 64 },
+              { "label": "5", "action": "text:5", "width": 64 },
+              { "label": "6", "action": "text:6", "width": 64 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "7", "action": "text:7", "width": 64 },
+              { "label": "8", "action": "text:8", "width": 64 },
+              { "label": "9", "action": "text:9", "width": 64 }
+            ]
+          },
+          {
+            "keys": [
+              { "label": "0", "action": "text:0", "width": 134 },
+              { "label": ".", "action": "text:.", "width": 64 }
+            ]
+          }
         ]
       }
     ]
