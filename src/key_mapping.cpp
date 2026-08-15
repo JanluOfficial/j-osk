@@ -98,13 +98,52 @@ std::optional<KeyAction> map_char_to_key(char c) {
 }
 
 std::optional<int> map_special_key(const std::string &name) {
-  if (name == "backspace") return KEY_BACKSPACE;
-  if (name == "enter")     return KEY_ENTER;
-  if (name == "tab")       return KEY_TAB;
-  if (name == "left")      return KEY_LEFT;
-  if (name == "right")     return KEY_RIGHT;
-  if (name == "up")        return KEY_UP;
-  if (name == "down")      return KEY_DOWN;
+  if (name == "backspace")        return KEY_BACKSPACE;
+  if (name == "enter")            return KEY_ENTER;
+  if (name == "tab")              return KEY_TAB;
+  if (name == "esc")              return KEY_ESC;
+  if (name == "space")            return KEY_SPACE;
+  if (name == "home")             return KEY_HOME;
+  if (name == "end")              return KEY_END;
+  if (name == "pageup")           return KEY_PAGEUP;
+  if (name == "pagedown")         return KEY_PAGEDOWN;
+  if (name == "insert")           return KEY_INSERT;
+  if (name == "delete")           return KEY_DELETE;
+
+  // Arrow Keys
+  if (name == "left")             return KEY_LEFT;
+  if (name == "right")            return KEY_RIGHT;
+  if (name == "up")               return KEY_UP;
+  if (name == "down")             return KEY_DOWN;
+
+  // Function Row                 (F1 to F12)
+  if (name == "f1")               return KEY_F1;
+  if (name == "f2")               return KEY_F2;
+  if (name == "f3")               return KEY_F3;
+  if (name == "f4")               return KEY_F4;
+  if (name == "f5")               return KEY_F5;
+  if (name == "f6")               return KEY_F6;
+  if (name == "f7")               return KEY_F7;
+  if (name == "f8")               return KEY_F8;
+  if (name == "f9")               return KEY_F9;
+  if (name == "f10")              return KEY_F10;
+  if (name == "f11")              return KEY_F11;
+  if (name == "f12")              return KEY_F12;
+
+  // Extended Function Row        (F13 to F24)
+  if (name == "f13")              return KEY_F13;
+  if (name == "f14")              return KEY_F14;
+  if (name == "f15")              return KEY_F15;
+  if (name == "f16")              return KEY_F16;
+  if (name == "f17")              return KEY_F17;
+  if (name == "f18")              return KEY_F18;
+  if (name == "f19")              return KEY_F19;
+  if (name == "f20")              return KEY_F20;
+  if (name == "f21")              return KEY_F21;
+  if (name == "f22")              return KEY_F22;
+  if (name == "f23")              return KEY_F23;
+  if (name == "f24")              return KEY_F24;
+
   return std::nullopt;
 }
 
