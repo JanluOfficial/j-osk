@@ -9,7 +9,7 @@
     "rows": [
       {
         "keys": [
-          { "label": "tab", "action": "key:tab", "width": 2},
+          { "label": "tab", "action": "key:tab", "width": 48},
           { "label": "q", "action": "text:q" },
           { "label": "w", "action": "text:w" },
           { "label": "e", "action": "text:e" },
@@ -20,12 +20,12 @@
           { "label": "i", "action": "text:i" },
           { "label": "o", "action": "text:o" },
           { "label": "p", "action": "text:p" },
-          { "label": "back", "action": "key:backspace", "width": 2}
+          { "label": "back", "action": "key:backspace", "width": 48}
         ]
       },
       {
         "keys": [
-          { "label": "123", "action": "view:symbols", "width": 2 },
+          { "label": "123", "action": "view:symbols", "width": 48 },
           { "label": "a", "action": "text:a" },
           { "label": "s", "action": "text:s" },
           { "label": "d", "action": "text:d" },
@@ -36,12 +36,12 @@
           { "label": "k", "action": "text:k" },
           { "label": "l", "action": "text:l" },
           { "label": ";", "action": "text:;" },
-          { "label": "enter", "action": "key:enter", "width": 2}
+          { "label": "enter", "action": "key:enter", "width": 48}
         ]
       },
       {
         "keys": [
-          { "label": "shift", "action": "mod:shift", "width": 2},
+          { "label": "shift", "action": "mod:shift", "width": 48},
           { "label": "z", "action": "text:z" },
           { "label": "x", "action": "text:x" },
           { "label": "c", "action": "text:c" },
@@ -52,14 +52,14 @@
           { "label": ",", "action": "text:," },
           { "label": ".", "action": "text:." },
           { "label": "/", "action": "text:/" },
-          { "label": "shift", "action": "mod:shift", "width": 2}
+          { "label": "shift", "action": "mod:shift", "width": 48}
         ]
       },
       {
         "keys": [
-          { "label": "control", "action": "mod:control", "width": 2},
+          { "label": "control", "action": "mod:control", "width": 48},
           { "label": " ", "action": "text: " },
-          { "label": "control", "action": "mod:control", "width": 2}
+          { "label": "control", "action": "mod:control", "width": 48}
         ]
       }
     ]

@@ -12,8 +12,7 @@ using namespace peel;
 namespace j_osk {
 
 namespace {
-  constexpr float KEY_UNIT_SIZE = 50.0f;
-  constexpr float MIN_SIZED_WIDTH = 0.5f;
+  constexpr float MIN_SIZED_WIDTH = 24.0f;
   constexpr const char MOD_PREFIX[] = "mod:";
 
   void update_modifier_button_style(Gtk::Button *button, bool active) {
@@ -29,8 +28,8 @@ Gtk::Button *create_key_button(const LayoutKey &key) {
   button->get_style_context()->add_class("key");
 
   if (key.width && *key.width >= MIN_SIZED_WIDTH) {
-    button->set_size_request(static_cast<int>(*key.width * KEY_UNIT_SIZE),
-                              static_cast<int>(KEY_UNIT_SIZE));
+    button->set_size_request(static_cast<int>(*key.width),
+                              static_cast<int>(MIN_SIZED_WIDTH));
     button->set_hexpand(false);
   } else {
     button->set_hexpand(true);
