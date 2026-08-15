@@ -109,7 +109,7 @@ std::optional<int> map_special_key(const std::string &name) {
 }
 
 void emit_key_press_with_modifiers(int fd, int key_code, bool shift, const j_osk::ModifierState &state) {
-  bool temp_shift = shift && !state.is_active(j_osk::Modifier::Shift);
+  bool emit_shift = shift || state.is_active(j_osk::Modifier::Shift);
 
   if (state.is_active(j_osk::Modifier::Control))
     j_osk::emit_key_down(fd, KEY_LEFTCTRL);
@@ -117,12 +117,12 @@ void emit_key_press_with_modifiers(int fd, int key_code, bool shift, const j_osk
     j_osk::emit_key_down(fd, KEY_LEFTALT);
   if (state.is_active(j_osk::Modifier::Super))
     j_osk::emit_key_down(fd, KEY_LEFTMETA);
-  if (temp_shift)
+  if (emit_shift)
     j_osk::emit_key_down(fd, KEY_LEFTSHIFT);
 
   j_osk::emit_key_press(fd, key_code);
 
-  if (temp_shift)
+  if (emit_shift)
     j_osk::emit_key_up(fd, KEY_LEFTSHIFT);
   if (state.is_active(j_osk::Modifier::Super))
     j_osk::emit_key_up(fd, KEY_LEFTMETA);
