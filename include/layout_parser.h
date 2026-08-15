@@ -21,6 +21,8 @@ struct LayoutRow {
 
 struct LayoutSection {
   std::vector<LayoutRow> rows;
+  std::optional<std::string> name;
+  std::optional<float> width;
 };
 
 struct LayoutMetadata {
@@ -42,6 +44,7 @@ public:
 
 private:
   static LayoutMetadata parseMetadata(const nlohmann::json &metadataJson);
+  static LayoutSection parseSection(const nlohmann::json &sectionJson);
   static LayoutRow parseRow(const nlohmann::json &rowJson);
   static LayoutKey parseKey(const nlohmann::json &keyJson);
 };
