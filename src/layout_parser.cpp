@@ -25,12 +25,12 @@ Layout LayoutParser::parseJson(const nlohmann::json &json) {
   layout.metadata = parseMetadata(json.at("metadata"));
 
   const auto &layoutJson = json.at("layout");
-  if (!layoutJson.contains("rows") || !layoutJson.at("rows").is_array()) {
-    throw std::runtime_error("Layout JSON 'layout' must contain an array of 'rows'");
+  if (!layoutJson.contains("sections") || !layoutJson.at("sections").is_array()) {
+    throw std::runtime_error("Layout JSON 'layout' must contain an array of 'sections'");
   }
 
-  for (const auto &rowJson : layoutJson.at("rows")) {
-    layout.rows.push_back(parseRow(rowJson));
+  for (const auto &sectionJson : layoutJson.at("sections")) {
+    layout.sections.push_back(parseSection(sectionJson));
   }
 
   return layout;
@@ -48,6 +48,19 @@ LayoutMetadata LayoutParser::parseMetadata(const nlohmann::json &metadataJson) {
   metadata.split = metadataJson.value("split", false);
 
   return metadata;
+}
+
+LayoutSection LayoutParser::parseSection(const nlohmann::json &sectionJson) {
+  if (!sectionJson.contains("rows") || !sectionJson.at("rows").is_array()) {
+    throw std::runtime_error("Each layout section must contain an array of 'rows'");
+  }
+
+  LayoutSection section;
+  for (const auto &rowJson : sectionJson.at("rows")) {
+    section.rows.push_back(parseRow(rowJson));
+  }
+
+  return section;
 }
 
 LayoutRow LayoutParser::parseRow(const nlohmann::json &rowJson) {
