@@ -171,7 +171,8 @@ static void build_window(Gtk::Application *app, int uinput_fd,
 int main(int argc, char *argv[]) {
   int fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK); // uinput virtual device setup
 
-  ioctl(fd, UI_SET_EVBIT, EV_KEY);
+  j_osk::init_uinput_device(fd);
+  //ioctl(fd, UI_SET_EVBIT, EV_KEY);
 
   auto collect_keycodes = [&](const j_osk::Layout &layout) {
     std::set<int> codes;
