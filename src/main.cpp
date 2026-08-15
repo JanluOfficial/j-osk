@@ -121,7 +121,7 @@ static void build_window(Gtk::Application *app, int uinput_fd,
   LS::set_anchor(window, LS::Edge::RIGHT,  true);
   LS::auto_exclusive_zone_enable(window);
 
-  auto main_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 6); // 6px gap between rows
+  auto main_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6); // 6px gap between rows
 
   auto modifier_buttons = std::make_shared<std::vector<j_osk::KeyButtonEntry>>();
 
@@ -134,26 +134,33 @@ static void build_window(Gtk::Application *app, int uinput_fd,
     }
   };
 
-  for (const auto &row : layout.rows) {
-    auto row_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6);
-    //row_box->set_homogeneous(true);
+  for (const auto &section : layout.sections) {
+    auto section_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 6);
+    if (section.width) {
+      section_box->set_size_request(*section.width, -1);
+    }
+    for (const auto &row : section.rows) {
+      auto row_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6);
+      //row_box->set_homogeneous(true);
 
-    for (const auto &key : row.keys) {
-      if (key.label.empty())
-        continue;
+      for (const auto &key : row.keys) {
+        if (key.label.empty())
+          continue;
 
-      auto *button = j_osk::create_key_button(key);
+        auto *button = j_osk::create_key_button(key);
 
-      if (key.action.rfind("mod:", 0) == 0) {
-        if (auto mod = j_osk::parse_modifier(key.action.substr(sizeof("mod:") - 1)))
-          modifier_buttons->push_back({button, *mod});
+        if (key.action.rfind("mod:", 0) == 0) {
+          if (auto mod = j_osk::parse_modifier(key.action.substr(sizeof("mod:") - 1)))
+            modifier_buttons->push_back({button, *mod});
+        }
+
+        j_osk::wire_key_action(button, key, uinput_fd, modifier_state, sync_modifier_buttons);
+        row_box->append(button);
       }
 
-      j_osk::wire_key_action(button, key, uinput_fd, modifier_state, sync_modifier_buttons);
-      row_box->append(button);
+      section_box->append(std::move(row_box));
     }
-
-    main_box->append(std::move(row_box));
+    main_box->append(std::move(section_box));
   }
 
   sync_modifier_buttons();
@@ -174,27 +181,29 @@ int main(int argc, char *argv[]) {
         codes.insert(*code);
     }
 
-    for (const auto &row : layout.rows) {
-      for (const auto &key : row.keys) {
-        if (key.action.rfind("text:", 0) == 0) {
-          std::string text = key.action.substr(sizeof("text:") - 1);
-          for (char c : text) {
-            auto mapped = map_char_to_key(c);
-            if (!mapped)
-              continue;
-            codes.insert(mapped->key_code);
-            if (mapped->shift)
-              codes.insert(KEY_LEFTSHIFT);
+    for (const auto &section : layout.sections) {
+      for (const auto &row : section.rows) {
+        for (const auto &key : row.keys) {
+          if (key.action.rfind("text:", 0) == 0) {
+            std::string text = key.action.substr(sizeof("text:") - 1);
+            for (char c : text) {
+              auto mapped = map_char_to_key(c);
+              if (!mapped)
+                continue;
+              codes.insert(mapped->key_code);
+              if (mapped->shift)
+                codes.insert(KEY_LEFTSHIFT);
+            }
+            continue;
           }
-          continue;
-        }
- 
-        if (key.action.rfind("key:", 0) == 0) {
-          if (auto code = map_special_key(key.action.substr(sizeof("key:") - 1)))
-            codes.insert(*code);
-          continue;
-        }
 
+          if (key.action.rfind("key:", 0) == 0) {
+            if (auto code = map_special_key(key.action.substr(sizeof("key:") - 1)))
+              codes.insert(*code);
+            continue;
+          }
+
+        }
       }
     }
 
