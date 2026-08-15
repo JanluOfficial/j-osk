@@ -19,6 +19,10 @@ struct LayoutRow {
   std::vector<LayoutKey> keys;
 };
 
+struct LayoutSection {
+  std::vector<LayoutRow> rows;
+};
+
 struct LayoutMetadata {
   std::string name;
   std::string author;
@@ -28,7 +32,7 @@ struct LayoutMetadata {
 
 struct Layout {
   LayoutMetadata metadata;
-  std::vector<LayoutRow> rows;
+  std::vector<LayoutSection> sections;
 };
 
 class LayoutParser {
