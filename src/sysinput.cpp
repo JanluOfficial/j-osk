@@ -6,6 +6,10 @@ struct input_event ie;
 
 namespace j_osk {
 
+void init_uinput_device(int fd) {
+  ioctl(fd, UI_SET_EVBIT, EV_KEY);
+}
+
 void emit_key_down(int fd, int key_code) {
   ie.type = EV_KEY; ie.code = key_code; ie.value = 1;
   write (fd, &ie, sizeof (ie));
