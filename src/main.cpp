@@ -122,6 +122,10 @@ static void build_window(Gtk::Application *app, int uinput_fd,
   LS::auto_exclusive_zone_enable(window);
 
   auto main_box = Gtk::Box::create(Gtk::Orientation::HORIZONTAL, 6); // 6px gap between rows
+  main_box->set_margin_top(6);
+  main_box->set_margin_bottom(6);
+  main_box->set_margin_start(6);
+  main_box->set_margin_end(6);
 
   auto modifier_buttons = std::make_shared<std::vector<j_osk::KeyButtonEntry>>();
 
