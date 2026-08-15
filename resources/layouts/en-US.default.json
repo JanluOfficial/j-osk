@@ -61,7 +61,7 @@
               { "label": "control", "action": "mod:control", "width": 96 },
               { "label": "super", "action": "mod:super", "width": 96 },
               { "label": "alt", "action": "mod:alt", "width": 96 },
-              { "label": " ", "action": "text: " },
+              { "label": " ", "action": "key:space" },
               { "label": "alt", "action": "mod:alt", "width": 96 },
               { "label": "control", "action": "mod:control", "width": 96 }
             ]
